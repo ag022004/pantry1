@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantry Management with Chat</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #121212;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #c0c0c0;
+    }
+
+    .main-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+      text-align: center;
+      position: relative;
+    }
+
+    .container {
+      background: #1f1f1f;
+      padding: 2rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 800px;
+      border: 2px solid #2c2c2c;
+      color: #c0c0c0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 500px; /* Set a minimum height to keep the container size constant */
+    }
+
+    .navbar {
+      background: #333;
+      padding: 1rem;
+      border-radius: 25px;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .navbar-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .navbar-link {
+      color: #c0c0c0;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      margin: 0 1rem;
+      transition: color 0.3s;
+    }
+
+    .navbar-link:hover,
+    .navbar-link.active {
+      color: #ffdd57;
+    }
+
+    .form-input {
+      width: calc(100% - 2rem);
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border: 1px solid #2c2c2c;
+      border-radius: 4px;
+      background-color: #121212;
+      color: #c0c0c0;
+      font-size: 1rem;
+    }
+
+    .form-input::placeholder {
+      color: #c0c0c0;
+    }
+
+    .form-input[type="date"] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      color: #c0c0c0;
+      background-color: #121212;
+      border: 1px solid #2c2c2c;
+      border-radius: 4px;
+      padding: 1rem;
+    }
+
+    .form-input[type="date"]::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+
+    .form-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2rem;
+      border: none;
+      background-color: #ffdd57;
+      color: #333;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background-color 0.3s;
+    }
+
+    .form-btn:hover {
+      background-color: #e6c44d;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #dashboard-items {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #dashboard-items li {
+      background-color: #2c2c2c;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .form-container, .dashboard-content {
+      width: 50%;
+    }
+
+    /* Chatbox styles */
+    .chatbox {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      max-height: 400px;
+      background: #1f1f1f;
+      border: 2px solid #2c2c2c;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    .chatbox-header {
+      background: #333;
+      padding: 10px;
+      color: #ffdd57;
+      text-align: center;
+      font-weight: bold;
+      border-bottom: 1px solid #2c2c2c;
+    }
+
+    .chatbox-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      color: #c0c0c0;
+    }
+
+    .chatbox-input {
+      display: flex;
+      border-top: 1px solid #2c2c2c;
+    }
+
+    .chatbox-input input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: #121212;
+      color: #c0c0c0;
+    }
+
+    .chatbox-input button {
+      padding: 10px;
+      background: #ffdd57;
+      border: none;
+      color: #333;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .chatbox-input button:hover {
+      background: #e6c44d;
+    }
+
+    /* Button to open chatbox */
+    .chatbox-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ffdd57;
+      color: #333;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+      font-size: 1.5rem;
+    }
+
+    .chatbox-toggle.hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="main-content">
+    <div class="container">
+      <div class="form-container">
+        <nav class="navbar">
+          <ul class="navbar-list">
+            <li class="navbar-item"><a href="#" class="navbar-link active" id="pantry-link" onclick="showPage('pantry')">Pantry</a></li>
+            <li class="navbar-item"><a href="#" class="navbar-link" id="dashboard-link" onclick="showPage('dashboard')">Dashboard</a></li>
+          </ul>
+        </nav>
+
+        <div id="pantry" class="page">
+          <form id="pantry-form">
+            <div class="input-wrapper">
+              <input type="text" name="item-name" class="form-input" placeholder="Item Name" required>
+              <input type="number" name="item-quantity" class="form-input" placeholder="Quantity" required>
+              <input type="date" name="item-expiration" class="form-input" required>
+            </div>
+            <button class="form-btn" type="submit">
+              <span>Add Item</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="dashboard-content hidden" id="dashboard">
+        <ul id="dashboard-items">
+          <!-- List of pantry items will be displayed here -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chatbox -->
+  <div class="chatbox hidden" id="chatbox">
+    <div class="chatbox-header">Chat with GPT</div>
+    <div class="chatbox-messages" id="chatbox-messages"></div>
+    <div class="chatbox-input">
+      <input type="text" id="chatbox-input" placeholder="Type a message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+  <button class="chatbox-toggle" id="chatbox-toggle" onclick="toggleChatbox()">💬</button>
+
+  <script>
+    function showPage(page) {
+      document.querySelectorAll('.navbar-link').forEach(link => link.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
+      document.getElementById(`${page}-link`).classList.add('active');
+      document.getElementById(page).classList.remove('hidden');
+      if (page === 'dashboard') {
+        updateDashboard();
+      }
+    }
+
+    function updateDashboard() {
+      const dashboardItems = document.getElementById('dashboard-items');
+      dashboardItems.innerHTML = '';
+      const items = JSON.parse(localStorage.getItem('pantryItems')) || [];
+      items.forEach(item => {
+        const itemElement = document.createElement('li');
+        itemElement.textContent = `${item.name} - ${item.quantity} - ${item.expiration}`;
+        dashboardItems.appendChild(itemElement);
+      });
+    }
+
+    document.getElementById('pantry-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const itemName = event.target['item-name'].value;
+      const itemQuantity = event.target['item-quantity'].value;
+      const itemExpiration = event.target['item-expiration'].value;
+
+      // Save to localStorage
+      const items = JSON.parse(localStorage.getItem('pantryItems')) || [];
+      items.push({ name: itemName, quantity: itemQuantity, expiration: itemExpiration });
+      localStorage.setItem('pantryItems', JSON.stringify(items));
+
+      // Clear form fields
+      event.target.reset();
+    });
+
+    // Load pantry items from localStorage on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = JSON.parse(localStorage.getItem('pantryItems')) || [];
+    });
+
+    // Chatbox functions
+    function toggleChatbox() {
+      const chatbox = document.getElementById('chatbox');
+      const chatboxToggle = document.getElementById('chatbox-toggle');
+      chatbox.classList.toggle('hidden');
+      chatboxToggle.classList.toggle('hidden');
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chatbox-input');
+      const message = input.value;
+      if (message.trim() === '') return;
+
+      // Display the user's message
+      const messagesContainer = document.getElementById('chatbox-messages');
+      const userMessage = document.createElement('div');
+      userMessage.textContent = message;
+      userMessage.style.textAlign = 'right';
+      messagesContainer.appendChild(userMessage);
+
+      // Clear the input field
+      input.value = '';
+
+      // Send the message to the backend (Llama 3 model)
+      fetch('https://api.your-llama-backend.com/v1/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer YOUR_API_KEY'
+        },
+        body: JSON.stringify({ message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Display the AI's response
+        const aiMessage = document.createElement('div');
+        aiMessage.textContent = data.response;
+        aiMessage.style.textAlign = 'left';
+        messagesContainer.appendChild(aiMessage);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>
