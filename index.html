@@ -59,9 +59,7 @@
       padding: 1rem;
       border-radius: 15px;
       margin-bottom: 2rem;
-      width: calc(100% - 4rem);
-      display: flex;
-      justify-content: space-between;
+      width: calc(100% - 2rem);
     }
 
     .navbar-list {
@@ -83,20 +81,6 @@
     .navbar-link:hover,
     .navbar-link.active {
       color: #ffdd57;
-    }
-
-    .reset-btn {
-      color: #c0c0c0;
-      background: #ffdd57;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .reset-btn:hover {
-      background-color: #e6c44d;
     }
 
     .form-input {
@@ -240,7 +224,6 @@
           <li class="navbar-item"><a href="#" class="navbar-link active" id="pantry-link" onclick="showPage('pantry')">Pantry</a></li>
           <li class="navbar-item"><a href="#" class="navbar-link" id="dashboard-link" onclick="showPage('dashboard')">Dashboard</a></li>
         </ul>
-        <button class="reset-btn" onclick="resetPantry()">Reset</button>
       </nav>
 
       <div id="pantry" class="page">
@@ -258,14 +241,6 @@
 
       <div id="dashboard" class="page hidden">
         <section class="dashboard-content">
-          <form id="ingredient-form">
-            <div class="input-wrapper">
-              <input type="text" name="ingredient-name" class="form-input" placeholder="Ingredient Name" required>
-            </div>
-            <button class="form-btn" type="submit">
-              <span>Add Ingredient</span>
-            </button>
-          </form>
           <ul id="dashboard-items">
             <!-- List of pantry items will be displayed here -->
           </ul>
@@ -278,7 +253,7 @@
     function showPage(page) {
       document.querySelectorAll('.navbar-link').forEach(link => link.classList.remove('active'));
       document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
-      document.getElementById(`${page}-link`).classList.add('active');
+      document.getElementById(${page}-link).classList.add('active');
       document.getElementById(page).classList.remove('hidden');
       if (page === 'dashboard') {
         updateDashboard();
@@ -291,13 +266,13 @@
       const items = JSON.parse(localStorage.getItem('pantryItems')) || [];
       items.forEach((item, index) => {
         const itemElement = document.createElement('li');
-        itemElement.innerHTML = `
+        itemElement.innerHTML = 
           <span>${item.name} - ${item.quantity}</span>
           <div class="item-buttons">
             <div class="item-button red" onclick="changeQuantity(${index}, -1)">-</div>
             <div class="item-button green" onclick="changeQuantity(${index}, 1)">+</div>
           </div>
-        `;
+        ;
         dashboardItems.appendChild(itemElement);
       });
     }
@@ -312,11 +287,6 @@
       updateDashboard();
     }
 
-    function resetPantry() {
-      localStorage.removeItem('pantryItems');
-      updateDashboard();
-    }
-
     document.getElementById('pantry-form').addEventListener('submit', function(event) {
       event.preventDefault();
       const itemName = event.target['item-name'].value;
@@ -327,20 +297,6 @@
       const items = JSON.parse(localStorage.getItem('pantryItems')) || [];
       items.push({ name: itemName, quantity: parseInt(itemQuantity), expiration: itemExpiration });
       localStorage.setItem('pantryItems', JSON.stringify(items));
-
-      // Clear form fields
-      event.target.reset();
-      updateDashboard();
-    });
-
-    document.getElementById('ingredient-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const ingredientName = event.target['ingredient-name'].value;
-
-      // Save to localStorage (you might want to use a different key if you want to separate ingredients from pantry items)
-      const ingredients = JSON.parse(localStorage.getItem('ingredients')) || [];
-      ingredients.push({ name: ingredientName });
-      localStorage.setItem('ingredients', JSON.stringify(ingredients));
 
       // Clear form fields
       event.target.reset();
