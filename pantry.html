@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantry Input</title>
+  <link rel="shortcut icon" href="./assets/images/logo.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #121212;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #c0c0c0;
+      position: relative;
+    }
+
+    .header {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 1.5rem;
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .main-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+      text-align: center;
+    }
+
+    .container {
+      background: #1f1f1f;
+      padding: 2rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      height: 300px;
+      border: 2px solid #2c2c2c;
+      color: #c0c0c0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .form-input {
+      width: calc(100% - 2rem);
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border: 1px solid #2c2c2c;
+      border-radius: 4px;
+      background-color: #121212;
+      color: #c0c0c0;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-input::placeholder {
+      color: #c0c0c0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+    }
+
+    .form-input[type="date"] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      color: #c0c0c0;
+      background-color: #121212;
+      border: 1px solid #2c2c2c;
+      border-radius: 4px;
+      padding: 1rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+    }
+
+    .form-input[type="date"]::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+
+    .form-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2rem;
+      border: none;
+      background-color: #ffdd57;
+      color: #333;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background-color 0.3s;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+    }
+
+    .form-btn:hover {
+      background-color: #e6c44d;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">Pantry Tracker</div>
+
+  <div class="main-content">
+    <div class="container">
+      <form id="pantry-form">
+        <div class="input-wrapper">
+          <input type="text" name="item-name" class="form-input" placeholder="Item Name" required>
+          <input type="number" name="item-quantity" class="form-input" placeholder="Quantity" required>
+          <input type="date" name="item-expiration" class="form-input" required>
+        </div>
+        <button class="form-btn" type="submit">
+          <span>Add Item</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('pantry-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const itemName = event.target['item-name'].value;
+      const itemQuantity = event.target['item-quantity'].value;
+      const itemExpiration = event.target['item-expiration'].value;
+
+      // Save to localStorage
+      const items = JSON.parse(localStorage.getItem('pantryItems')) || [];
+      items.push({ name: itemName, quantity: parseInt(itemQuantity), expiration: itemExpiration });
+      localStorage.setItem('pantryItems', JSON.stringify(items));
+
+      // Clear form fields
+      event.target.reset();
+    });
+  </script>
+
+</body>
+
+</html>
