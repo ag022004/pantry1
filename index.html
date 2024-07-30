@@ -51,6 +51,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-sizing: border-box;
     }
 
     .navbar {
@@ -144,6 +145,11 @@
 
     .dashboard-content {
       width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     #dashboard-items {
@@ -169,6 +175,7 @@
       color: #c0c0c0;
       font-family: 'Poppins', sans-serif;
       position: relative;
+      box-sizing: border-box;
     }
 
     .item-buttons {
@@ -186,6 +193,8 @@
       height: 1.5rem;
       border-radius: 50%;
       cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
     }
 
     .item-button.red {
