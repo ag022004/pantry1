@@ -59,7 +59,7 @@
       padding: 1rem;
       border-radius: 15px;
       margin-bottom: 2rem;
-      width: calc(100% - 2rem);
+      width: calc(100% - 4rem);
       display: flex;
       justify-content: space-between;
     }
@@ -258,6 +258,14 @@
 
       <div id="dashboard" class="page hidden">
         <section class="dashboard-content">
+          <form id="ingredient-form">
+            <div class="input-wrapper">
+              <input type="text" name="ingredient-name" class="form-input" placeholder="Ingredient Name" required>
+            </div>
+            <button class="form-btn" type="submit">
+              <span>Add Ingredient</span>
+            </button>
+          </form>
           <ul id="dashboard-items">
             <!-- List of pantry items will be displayed here -->
           </ul>
@@ -319,6 +327,20 @@
       const items = JSON.parse(localStorage.getItem('pantryItems')) || [];
       items.push({ name: itemName, quantity: parseInt(itemQuantity), expiration: itemExpiration });
       localStorage.setItem('pantryItems', JSON.stringify(items));
+
+      // Clear form fields
+      event.target.reset();
+      updateDashboard();
+    });
+
+    document.getElementById('ingredient-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const ingredientName = event.target['ingredient-name'].value;
+
+      // Save to localStorage (you might want to use a different key if you want to separate ingredients from pantry items)
+      const ingredients = JSON.parse(localStorage.getItem('ingredients')) || [];
+      ingredients.push({ name: ingredientName });
+      localStorage.setItem('ingredients', JSON.stringify(ingredients));
 
       // Clear form fields
       event.target.reset();
